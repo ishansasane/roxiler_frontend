@@ -87,8 +87,8 @@ export const StarRating: React.FC<StarRatingProps> = ({
               }
             }}
             className={`rounded-sm transition-colors ${interactive
-                ? 'cursor-pointer hover:text-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#191c22]'
-                : 'cursor-default'
+              ? 'cursor-pointer hover:text-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#191c22]'
+              : 'cursor-default'
               }`}
           >
             <span className="relative block">
