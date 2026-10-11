@@ -173,16 +173,32 @@ export const adminSlice = createSlice({
 
     // Users
     builder
+      .addCase(fetchAdminUsers.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(fetchAdminUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.users = action.payload.data;
         state.userPagination = action.payload.pagination;
+      })
+      .addCase(fetchAdminUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
 
     // Stores
     builder
+      .addCase(fetchAdminStores.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(fetchAdminStores.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.stores = action.payload.data;
         state.storePagination = action.payload.pagination;
+      })
+      .addCase(fetchAdminStores.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
 
     // Available Owners

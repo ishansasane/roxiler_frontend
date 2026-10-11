@@ -24,6 +24,7 @@ import {
   Eye,
   ArrowUpDown,
   RefreshCw,
+  Loader2,
 } from 'lucide-react';
 
 export const AdminDashboardPage: React.FC = () => {
@@ -361,7 +362,16 @@ export const AdminDashboardPage: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
-                    {stores.length === 0 ? (
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={5} className="py-12 text-center text-slate-400">
+                          <div className="flex flex-col items-center justify-center gap-2">
+                            <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
+                            <span className="text-sm font-medium">Loading registered stores...</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : stores.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="py-8 text-center text-slate-500">
                           No stores found matching your filters.
@@ -528,7 +538,16 @@ export const AdminDashboardPage: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800">
-                    {users.length === 0 ? (
+                    {isLoading ? (
+                      <tr>
+                        <td colSpan={6} className="py-12 text-center text-slate-400">
+                          <div className="flex flex-col items-center justify-center gap-2">
+                            <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
+                            <span className="text-sm font-medium">Loading platform users...</span>
+                          </div>
+                        </td>
+                      </tr>
+                    ) : users.length === 0 ? (
                       <tr>
                         <td colSpan={6} className="py-8 text-center text-slate-500">
                           No users found matching your filters.

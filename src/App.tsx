@@ -8,6 +8,7 @@ import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { StoreOwnerDashboardPage } from './pages/StoreOwnerDashboardPage';
 import { UserDashboardPage } from './pages/UserDashboardPage';
 import { ProtectedRoute } from './routes/ProtectedRoute';
+import { GlobalTopLoader } from './components/GlobalTopLoader';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,9 @@ export const App: React.FC = () => {
 
   return (
     <BrowserRouter>
+      {/* Global animated loader for all network requests */}
+      <GlobalTopLoader />
+
       <Routes>
         {/* Public Routes */}
         <Route

@@ -17,6 +17,7 @@ import {
   SlidersHorizontal,
   ArrowUpDown,
   CheckCircle2,
+  Loader2,
 } from 'lucide-react';
 
 export const UserDashboardPage: React.FC = () => {
@@ -100,7 +101,25 @@ export const UserDashboardPage: React.FC = () => {
         </div>
 
         {/* Store Grid */}
-        {stores.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 shadow-xl animate-pulse space-y-4"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-slate-800" />
+                  <div className="w-20 h-5 rounded-full bg-slate-800" />
+                </div>
+                <div className="h-5 w-3/4 bg-slate-800 rounded-lg" />
+                <div className="h-4 w-1/2 bg-slate-800/60 rounded-lg" />
+                <div className="h-16 bg-slate-800/40 rounded-xl mt-4" />
+                <div className="h-10 bg-slate-800/60 rounded-xl mt-4" />
+              </div>
+            ))}
+          </div>
+        ) : stores.length === 0 ? (
           <div className="text-center py-16 bg-slate-900/40 border border-slate-800 rounded-3xl">
             <StoreIcon className="w-12 h-12 text-slate-600 mx-auto mb-3" />
             <h3 className="text-lg font-semibold text-slate-300">No stores found</h3>

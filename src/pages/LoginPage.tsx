@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { loginUser, clearAuthError } from '../store/slices/authSlice';
-import { Store, LogIn, AlertCircle, Shield, User, Store as StoreIcon } from 'lucide-react';
+import { Store, LogIn, AlertCircle, Loader2 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +18,10 @@ export const LoginPage: React.FC = () => {
     dispatch(clearAuthError());
 
     const result = await dispatch(loginUser({ email, password }));
+
     if (loginUser.fulfilled.match(result)) {
       const user = result.payload.user;
+
       if (user.role === 'ADMIN') {
         navigate('/admin');
       } else if (user.role === 'STORE_OWNER') {
@@ -32,63 +35,119 @@ export const LoginPage: React.FC = () => {
   const handleQuickLogin = (demoEmail: string) => {
     setEmail(demoEmail);
     setPassword('Password@123');
+    dispatch(clearAuthError());
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950 via-slate-900 to-slate-950">
-      <div className="w-full max-w-md">
-        {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 shadow-xl shadow-indigo-500/25 mb-3">
-            <Store className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">RateHub</h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Store Rating & Review Platform
-          </p>
-        </div>
+  const demoAccounts = [
+    { label: 'Admin', email: 'admin@punehotelrating.in' },
+    { label: 'Store owner', email: 'sandeep.joshi@hotelsahyadri.in' },
+    { label: 'Regular user', email: 'rohan.kulkarni@gmail.com' },
+  ];
 
-        {/* Login Card */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-2xl backdrop-blur-xl">
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-white">Sign In</h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Enter your credentials to access your dashboard
+  return (
+    <main className="min-h-screen bg-[#111318] flex items-center justify-center p-5 sm:p-8">
+      <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-[#30333b] bg-[#191c22] md:grid md:grid-cols-2">
+
+        {/* Brand section */}
+        <section className="hidden md:flex flex-col justify-between bg-[#151820] p-10 lg:p-12 text-white border-r border-[#30333b]">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white">
+                <Store size={22} />
+              </div>
+              <span className="text-xl font-semibold tracking-tight">
+                RateHub
+              </span>
+            </div>
+
+            <div className="mt-24">
+              <p className="text-sm font-medium text-indigo-400">
+                YOUR LOCAL GUIDE
+              </p>
+              <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight">
+                Good places.
+                <br />
+                Honest reviews.
+              </h1>
+              <p className="mt-5 max-w-sm text-sm leading-6 text-slate-400">
+                Discover stores, share your experience, and help others
+                make better choices.
+              </p>
+            </div>
+          </div>
+
+          <p className="text-xs text-slate-500">
+            RateHub · Store Rating & Review Platform
+          </p>
+        </section>
+
+        {/* Login section */}
+        <section className="p-6 sm:p-9 lg:p-12">
+          <div className="mb-8 md:hidden">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white">
+                <Store size={20} />
+              </div>
+              <span className="text-xl font-semibold text-white">
+                RateHub
+              </span>
+            </div>
+          </div>
+
+          <div className="mb-7">
+            <h2 className="text-2xl font-semibold tracking-tight text-white">
+              Welcome back
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              Sign in to continue to your account.
             </p>
           </div>
 
           {error && (
-            <div className="flex items-center gap-2.5 p-3.5 mb-5 bg-red-950/50 border border-red-800 text-red-200 text-sm rounded-xl">
-              <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+            <div
+              role="alert"
+              className="mb-5 flex items-start gap-2 rounded-lg border border-red-900/70 bg-red-950/40 p-3 text-sm text-red-300"
+            >
+              <AlertCircle size={17} className="mt-0.5 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Email Address
+              <label
+                htmlFor="email"
+                className="mb-2 block text-sm font-medium text-slate-300"
+              >
+                Email address
               </label>
               <input
+                id="email"
                 type="email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@example.com"
-                className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm"
+                placeholder="you@example.com"
+                className="w-full rounded-lg border border-[#3a3e48] bg-[#12151b] px-3.5 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+              <label
+                htmlFor="password"
+                className="mb-2 block text-sm font-medium text-slate-300"
+              >
                 Password
               </label>
               <input
+                id="password"
                 type="password"
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-sm"
+                placeholder="Enter your password"
+                className="w-full rounded-lg border border-[#3a3e48] bg-[#12151b] px-3.5 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
                 required
               />
             </div>
@@ -96,63 +155,60 @@ export const LoginPage: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all text-sm cursor-pointer mt-2"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3 text-sm font-medium text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <LogIn className="w-4 h-4" />
-              <span>{isLoading ? 'Signing in...' : 'Sign In'}</span>
+              {isLoading ? (
+                <>
+                  <Loader2 size={17} className="animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                <>
+                  <LogIn size={17} />
+                  Sign in
+                </>
+              )}
             </button>
           </form>
 
-          {/* Quick Demo Login Fillers */}
-          <div className="mt-6 pt-5 border-t border-slate-800">
-            <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5 text-center">
-              Quick Demo Accounts (1-Click Fill)
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin@storerating.com')}
-                className="flex flex-col items-center p-2 rounded-xl bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all text-center cursor-pointer group"
-              >
-                <Shield className="w-4 h-4 text-rose-400 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-medium text-slate-200">Admin</span>
-                <span className="text-[10px] text-slate-500">System</span>
-              </button>
+          {/* Demo accounts */}
+          <div className="mt-8 border-t border-[#30333b] pt-6">
+            <p className="text-sm font-medium text-slate-200">
+              Just exploring?
+            </p>
+            <p className="mt-1 text-xs leading-5 text-slate-400">
+              Fill in a demo account to try a different role.
+            </p>
 
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('alexander.smith@organicmarket.com')}
-                className="flex flex-col items-center p-2 rounded-xl bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all text-center cursor-pointer group"
-              >
-                <StoreIcon className="w-4 h-4 text-amber-400 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-medium text-slate-200">Owner</span>
-                <span className="text-[10px] text-slate-500">Store</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('user1@example.com')}
-                className="flex flex-col items-center p-2 rounded-xl bg-slate-800/60 hover:bg-slate-750 border border-slate-700/60 transition-all text-center cursor-pointer group"
-              >
-                <User className="w-4 h-4 text-indigo-400 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-medium text-slate-200">User</span>
-                <span className="text-[10px] text-slate-500">Normal</span>
-              </button>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {demoAccounts.map((account) => (
+                <button
+                  key={account.email}
+                  type="button"
+                  onClick={() => handleQuickLogin(account.email)}
+                  className="rounded-md border border-[#3a3e48] bg-[#20242c] px-3 py-2 text-xs font-medium text-slate-300 transition hover:border-indigo-500/60 hover:bg-indigo-500/10 hover:text-indigo-300"
+                >
+                  {account.label}
+                </button>
+              ))}
             </div>
+
+            <p className="mt-3 text-xs text-slate-500">
+              Demo password: Password@123
+            </p>
           </div>
 
-          {/* Registration link */}
-          <div className="mt-6 text-center text-xs text-slate-400">
-            Don't have an account?{' '}
+          <p className="mt-7 text-center text-sm text-slate-400">
+            New to RateHub?{' '}
             <Link
               to="/register"
-              className="text-indigo-400 hover:text-indigo-300 font-semibold underline underline-offset-4"
+              className="font-medium text-indigo-400 hover:text-indigo-300 hover:underline"
             >
-              Sign up as Normal User
+              Create an account
             </Link>
-          </div>
-        </div>
+          </p>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };

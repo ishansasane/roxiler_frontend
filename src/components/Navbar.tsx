@@ -1,8 +1,16 @@
+
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
-import { Store, LogOut, KeyRound, User as UserIcon, Shield, Store as StoreIcon } from 'lucide-react';
+import {
+  Store,
+  LogOut,
+  KeyRound,
+  User as UserIcon,
+  Shield,
+  Store as StoreIcon,
+} from 'lucide-react';
 import { ChangePasswordModal } from './ChangePasswordModal';
 
 export const Navbar: React.FC = () => {
@@ -17,23 +25,31 @@ export const Navbar: React.FC = () => {
   };
 
   const getRoleBadge = (role?: string) => {
+    const badgeClass =
+      'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium';
+
     switch (role) {
       case 'ADMIN':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-            <Shield className="w-3 h-3" /> Admin
+          <span className={`${badgeClass} border-rose-500/20 bg-rose-500/10 text-rose-300`}>
+            <Shield size={12} />
+            Admin
           </span>
         );
+
       case 'STORE_OWNER':
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <StoreIcon className="w-3 h-3" /> Store Owner
+          <span className={`${badgeClass} border-amber-500/20 bg-amber-500/10 text-amber-300`}>
+            <StoreIcon size={12} />
+            Store Owner
           </span>
         );
+
       default:
         return (
-          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-            <UserIcon className="w-3 h-3" /> User
+          <span className={`${badgeClass} border-indigo-500/20 bg-indigo-500/10 text-indigo-300`}>
+            <UserIcon size={12} />
+            User
           </span>
         );
     }
@@ -41,54 +57,67 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <Store className="w-5 h-5 text-white" />
+      <header className="sticky top-0 z-40 w-full border-b border-[#30333b] bg-[#191c22]">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
+          {/* Brand */}
+          <div className="flex shrink-0 items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white">
+              <Store size={20} />
             </div>
+
             <div>
-              <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent">
+              <span className="text-lg font-semibold tracking-tight text-white">
                 RateHub
               </span>
-              <span className="text-xs text-indigo-400 font-medium block -mt-1">
+              <span className="hidden text-xs text-slate-400 sm:block">
                 Store Rating Platform
               </span>
             </div>
           </div>
 
-          {/* User profile & actions */}
+          {/* User information and actions */}
           {user && (
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="hidden sm:flex flex-col items-end">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-slate-200 truncate max-w-[200px]" title={user.name}>
+            <div className="flex min-w-0 items-center gap-3 sm:gap-5">
+              <div className="hidden min-w-0 items-center gap-3 sm:flex">
+                <div className="min-w-0 text-right">
+                  <p
+                    className="truncate text-sm font-medium text-slate-200"
+                    title={user.name}
+                  >
                     {user.name}
-                  </span>
-                  {getRoleBadge(user.role)}
+                  </p>
+                  <p
+                    className="max-w-[220px] truncate text-xs text-slate-400"
+                    title={user.email}
+                  >
+                    {user.email}
+                  </p>
                 </div>
-                <span className="text-xs text-slate-400 truncate max-w-[200px]">
-                  {user.email}
-                </span>
+
+                {getRoleBadge(user.role)}
               </div>
 
-              <div className="flex items-center gap-2 border-l border-slate-800 pl-3">
+              <div className="flex items-center gap-2 border-l border-[#30333b] pl-3 sm:pl-4">
                 <button
+                  type="button"
                   onClick={() => setIsPasswordModalOpen(true)}
-                  title="Update Password"
-                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-750 border border-slate-700/80 rounded-xl transition-all"
+                  title="Change password"
+                  aria-label="Change password"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#3a3e48] bg-[#20242c] px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-slate-500 hover:bg-[#282d36] hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                 >
-                  <KeyRound className="w-3.5 h-3.5 text-slate-400" />
+                  <KeyRound size={15} />
                   <span className="hidden md:inline">Password</span>
                 </button>
 
                 <button
+                  type="button"
                   onClick={handleLogout}
                   title="Log out"
-                  className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-rose-300 hover:text-white bg-rose-950/30 hover:bg-rose-900/50 border border-rose-800/40 rounded-xl transition-all"
+                  aria-label="Log out"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-rose-500/20 bg-rose-500/5 px-3 py-2 text-sm font-medium text-rose-300 transition hover:border-rose-500/40 hover:bg-rose-500/15 hover:text-rose-200 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut size={15} />
                   <span className="hidden md:inline">Logout</span>
                 </button>
               </div>
@@ -97,7 +126,6 @@ export const Navbar: React.FC = () => {
         </div>
       </header>
 
-      {/* Password Modal */}
       <ChangePasswordModal
         isOpen={isPasswordModalOpen}
         onClose={() => setIsPasswordModalOpen(false)}
